@@ -3118,6 +3118,22 @@ float ImGui::TableGetHeaderRowHeight()
     return row_height + g.Style.CellPadding.y * 2.0f;
 }
 
+/**
+ * @author Eli Michaud
+ * @since 7/14/2026
+ */
+float ImGui::TableGetHeaderRowHeight(ImGuiTable *table)
+{
+  ImGuiContext& g = *GImGui;
+
+  float row_height = g.FontSize;
+  for (int column_n = 0; column_n < table->ColumnsCount; column_n++)
+    if (IM_BITARRAY_TESTBIT(table->EnabledMaskByIndex, column_n))
+      if ((table->Columns[column_n].Flags & ImGuiTableColumnFlags_NoHeaderLabel) == 0)
+        row_height = ImMax(row_height, CalcTextSize(TableGetColumnName(table, column_n)).y);
+  return row_height + g.Style.CellPadding.y * 2.0f;
+}
+
 float ImGui::TableGetHeaderAngledMaxLabelWidth()
 {
     ImGuiContext& g = *GImGui;
